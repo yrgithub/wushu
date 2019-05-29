@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xiongdiyibeizi.mapper.CompanyPictureMapper" >
+
+    <resultMap id="companyPicture" type="com.xiongdiyibeizi.bean.user.CompanyPicture">
+        <id column="picture_id" property="pictureId" jdbcType="VARCHAR"/>
+        <result column="picture_path" property="picturePath" jdbcType="VARCHAR"/>
+        <result column="suffix_name" property="suffixName" jdbcType="VARCHAR"/>
+        <result column="picture_name" property="pictureName" jdbcType="VARCHAR"/>
+        <result column="original_file_name" property="originalName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="insert2picture" parameterType="com.xiongdiyibeizi.bean.user.CompanyPicture">
+        insert into tb_company_picture(
+          picture_id,
+          picture_path,
+          suffix_name,
+          picture_name,
+          original_file_name
+        )values (
+          #{pictureId},
+          #{picturePath},
+          #{suffixName},
+          #{pictureName},
+          #{originalName}
+        )
+    </insert>
+
+    <update id="update2picture" parameterType="com.xiongdiyibeizi.bean.user.CompanyPicture">
+        update tb_company_picture
+        set
+        picture_path = #{picturePath},
+        suffix_name = #{suffixName},
+        picture_name = #{pictureName},
+        original_file_name = #{originalName}
+        where  picture_id = #{pictureId}
+    </update>
+
+    <select id="getPictureById" parameterType="java.lang.String" resultMap="companyPicture">
+        select
+        picture_id,
+        picture_path,
+        suffix_name,
+        picture_name,
+        original_file_name
+        from tb_company_picture
+        where picture_id = #{pictureId}
+    </select>
+
+    <delete id="delPictureById" parameterType="java.lang.String">
+        delete from tb_company_picture where picture_id = #{strInfoId}
+    </delete>
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xiongdiyibeizi.mapper.UserMapper" >
+  <resultMap id="user" type="com.xiongdiyibeizi.bean.user.User" >
+    <id column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="user_type" property="userType" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="role" property="role" jdbcType="INTEGER" />
+  </resultMap>
+
+    <update id="updateCreateBy" parameterType="java.util.Map">
+        update tb_user
+        set create_by = #{createBy}
+        where user_name = #{username}
+    </update>
+
+    <update id="updatePassword" parameterType="java.util.Map">
+        update tb_user
+        set password = #{password}
+        where user_name = #{username}
+    </update>
+
+    <select id="getPassword" parameterType="java.lang.String" resultType="java.lang.String">
+        select password from tb_user where user_name = #{username}
+    </select>
+
+    <select id="getCountUser" parameterType="string" resultType="int">
+        select count(*) from tb_user where user_name = #{username}
+    </select>
+
+    <insert id="registUser" parameterType="com.xiongdiyibeizi.bean.user.User">
+        insert into tb_user (
+          user_name,
+          password,
+          user_type,
+          create_time,
+          create_by,
+          status
+        ) values (
+          #{userName},
+          #{password},
+          #{userType},
+          SYSDATE(),
+          #{createBy},
+          1
+        )
+    </insert>
+
+    <select id="selectUserById" parameterType="string" resultMap="user">
+        select
+          user_name,
+          password,
+          user_type,
+          create_time,
+          create_by,
+          status,
+          role
+        from
+        tb_user tu
+        left join tb_user_type tut
+        on tu.user_type = tut.type_id
+        where user_name = #{username}
+    </select>
+
+    <delete id="deleteByUsername" parameterType="java.lang.String">
+        delete from tb_user where user_name = #{strInfoId}
+    </delete>
+</mapper>

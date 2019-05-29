@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>NewsManage.html</title>
+
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="this is my page">
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" href="../../plugins/bootstrap/css/bootstrap.min.css"
+		type="text/css"></link>
+	<link rel="stylesheet" href="../../plugins/FlatUI/dist/css/flat-ui.css"
+		type="text/css"></link>
+	<link rel="shortcut icon" href="../../plugins/FlatUI/dist/img/favicon.ico">
+	<link rel="stylesheet" href="../../css/style.css">
+	<script type="text/javascript" src="../../js/jquery.js"></script>
+	<script type="text/javascript" src="../../plugins/FlatUI/dist/js/flat-ui.js"></script>
+	<script type="text/javascript" src="../../plugins/bootstrap/js/messager.js"></script>
+	<script type="text/javascript" src="../../js/config.js"></script>
+	<script type="text/javascript">
+	    window.onload = function(){
+	    	var json = {
+	    			describe:""
+	    		};
+	    	$.ajax({
+	    		type : "POST",
+	    		url : getHost() + "/wushu/img/query",
+	    		data : JSON.stringify(json),
+	    		contentType : "application/json;charset=UTF-8",
+	    		dataType : "json",
+	    		async : true,
+	    		success : function(data){
+	    			if(data.success == true && data.data != null){
+	    				var imgTbody = $("#imgTbody");
+	    				var tableHtml = "";
+	    				for(var i = 0; i < data.data.length; i++){
+	    					var d = data.data[i];
+	    					var uploadTime = new Date(d.uploadTime);
+	    					var time =  (uploadTime.getFullYear()) + "-" + 
+	    			           (uploadTime.getMonth() + 1) + "-" +
+	    			           (uploadTime.getDate()) + " " + 
+	    			           (uploadTime.getHours()) + ":" + 
+	    			           (uploadTime.getMinutes()) + ":" + 
+	    			           (uploadTime.getSeconds());
+	    					tableHtml += "<tr><td>"+ d.name 
+	    					+"</td><td><div class='fileupload-new thumbnail' style='width: 50px; height: 50px;'><img src='"+getHost()+"/wushu/img/queryContent?imgId="+ d.imgId +"'/></div></td><td>"+ d.discribe +"</td><td>"+time
+	    					+ "</td><td>"
+	    					//+ "<a class='btn btn-primary  btn-xs btn-warning' href='imgModify.html'>修改<span class='glyphicon glyphicon-pencil'></span></a>"
+			  				+ "<a class='btn btn-primary btn-xs btn-success' href='imgDetail.html?imgId="+ d.imgId +"'>详情<span class='glyphicon glyphicon-list-alt'></span></a>"
+			  				+ "<a class='btn btn-primary btn-xs btn-danger' href='javascript:;' onclick='deleteImg(\"" + d.imgId + "\")'>删除<span class='glyphicon glyphicon-remove'></span></a>"
+			  				+ "</td></tr>"
+	    				}
+	    				document.getElementById("imgTbody").innerHTML = tableHtml;
+	    			}
+	    		},
+	    		error: function(request, msg, exception){
+	    			alert(msg);
+	    		}
+	    	});
+	    }
+		function deleteImg(id)
+		{
+			 $.messager.confirm("确认删除", "确认要删除吗?删除后不能恢复", function() { 
+			    	var json = {
+			    			imgId : id
+			    		};
+					 $.ajax({
+				    		type : "POST",
+				    		url : getHost() + "/wushu/img/delete",
+				    		data : json,
+				    		contentType : "application/x-www-form-urlencoded",
+				    		dataType : "json",
+				    		async : true,
+				    		success : function(data){
+				    			if(data.success == true){
+				    				alert("删除成功");
+				    				window.location.href = getHost()+ "/wushu/pages/backend/imgManage.html";
+				    			}
+				    		},
+				    		error: function(request, msg, exception){
+				    			alert(msg);
+				    		}
+				    	});
+      		 });
+		}
+	</script>
+</head>
+
+<body style="padding: 5px 10px">
+
+	<div class="panel panel-primary">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">图片管理</h3>
+	  </div>
+	  <div class="panel-body">
+	  		<a  href="imgAdd.html" class="btn btn-primary btn-default">
+	  			添加
+	  			<span class="glyphicon glyphicon-plus"></span>
+	  		</a>
+	  		<table id="imgTable" class="table table-hover">
+	  			<thead>
+	  				<tr>
+	  					<th>图片名称</th>
+	  					<th>图片</th>
+	  					<th>图片描述</th>
+	  					<th>上传时间</th>
+	  					<th>操作</th>
+	  				</tr>
+	  			</thead>
+	  			<tbody id="imgTbody">
+	  			</tbody>
+	  		</table>
+	  </div>
+	</div>
+	
+</body>
+</html>

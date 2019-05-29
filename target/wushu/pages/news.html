@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<title>新闻中心_中国搏击协会</title>
+		<meta name="keywords" content="">
+		<meta name="description" content="">
+		<link rel="stylesheet" href="../admin/files/style.css">
+		<script type="text/javascript" src="../js/jquery.js"></script>
+		<script type="text/javascript" src="../js/config.js"></script>
+		<script type="text/javascript">
+			window.onload=function(){
+				 var jq=jQuery.noConflict();
+				 var json = {
+			    			newsTitle : "",
+			    			pageSize : 10,
+			    			startWith : 0
+			    		};
+				 jq.ajax({
+			    		type : "POST",
+			    		url : getHost() + "/wushu/news/queryByPage",
+			    		data : JSON.stringify(json),
+			    		contentType : "application/json;charset=UTF-8",
+			    		dataType : "json",
+			    		async : true,
+			    		success : function(data){
+			    			if(data.success == true && data.data != null){
+			    				var newsUlHtml = "";
+			    				for(var i = 0; i < data.data.length; i++){
+			    					var d = data.data[i];
+			    					var updateTime = new Date(d.updateTime);
+			    					var time =  (updateTime.getFullYear()) + "-" + 
+			    			           (updateTime.getMonth() + 1) + "-" +
+			    			           (updateTime.getDate()) + " " + 
+			    			           (updateTime.getHours()) + ":" + 
+			    			           (updateTime.getMinutes()) + ":" + 
+			    			           (updateTime.getSeconds());
+			    					newsUlHtml +="<li><a href='" + getHost() +"/wushu/pages/newsDetail.html?newsId=" + d.newsId +"'><h2>"+ d.shortTitle +"</h2><p>"+ time +"</p></a></li>"
+			    						"<li><a href='" + getHost() +"/wushu/pages/newsDetail.html?newsId=" + d.newsId +"'>"+ d.shortTitle +"</a></li>";
+			    				}
+			    				document.getElementById("newsUl").innerHTML = newsUlHtml;
+			    			}
+			    		},
+			    		error: function(request, msg, exception){
+			    			alert(msg);
+			    		}
+			    	});
+			}
+		</script>
+	</head>
+
+	<body>
+		
+		<!--header end-->
+		<div class="header w1000 clearfix">
+			<div class="logo fl"><img src="../admin/files/logo.png"></div>
+			<div class="fr">
+				<a href="javascript:void(0);">收藏本站</a>
+			</div>
+		</div>
+		<div class="nav w1000">
+			<div class="menu">
+				<ul>
+					<li>
+						<a href="http://39.100.99.143:8082/wushu/pages/main.html">首页</a>
+						
+						
+						<a href="http://39.100.99.143:8082/wushu/pages/news.html">新闻中心</a>
+						
+						
+						<a href="http://39.100.99.143:8082/wushu/pages/vipunit.html">会员单位</a>
+						
+						
+						<a href="http://39.100.99.143:8082/wushu/pages/img.html">精彩图片</a>
+						
+						<a href="http://39.100.99.143:8082/wushu/pages/abouts.html">关于我们</a>
+					</li>
+				</ul>
+			</div>
+			<div class="minnav">
+				<div class="fl">
+					您好，欢迎您来到中国搏击协会(HK)！
+				</div>
+				<div class="fr">
+					<div class="search">
+						<!-- <input placeholder="请输入关键词" class="searchinput" type="text"><button class="searchbtn">搜索</button> -->
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--nav end-->
+		<div class="container w1000 clearfix">
+			<div class="side-l mt20">
+				<div class="side-menu">
+					<div>新闻中心</div>
+					<ul>
+					
+					
+						<li>
+							<a href="http://39.100.99.143:8082/wushu/pages/news.html">行业新闻</a>
+						</li>
+					
+					</ul>
+				</div>
+				<div class="side-news mt20">
+					<div class="title">协会公告</div>
+					<!-- <ul class="news-list-ul">
+					
+
+					</ul> -->
+				</div>
+			</div>
+			<div class="side-r mt20">
+				<div class="title">
+					<h1>新闻中心</h1>
+					<div class="now">
+						<b>您当前位置：</b>
+						<a href="http://39.100.99.143:8082/wushu/pages/main.html">主页</a> &gt; <a href="http://39.100.99.143:8082/wushu/pages/news.html">新闻中心</a> &gt;
+					</div>
+				</div>
+				<div class="side-main">
+					<div class="news">
+						<ul id="newsUl">
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--container end-->
+		
+		<div class="container w1000 clearfix">
+			<div class="links mt20">
+				<dl>
+					<dt>友情链接</dt>
+					<dd>
+					<li><a href="http://39.100.99.143:8082/wushu/pages/main.html" target="_blank">中国搏击协会(hk)</a> </li><li><a href="http://www.zzsportshow.com/" target="_blank">世界武术文化产业博</a> </li><li><a href="http://wszx.sport.gov.cn/" target="_blank">国家体育总局武术运</a> </li><li><a href="http://www.sport.gov.cn/" target="_blank">国家体育总局</a> </li>
+					</dd>
+				</dl>
+			</div>
+		</div>
+		<!--container end-->
+		<div class="footer w1000 mt20">
+			<span>电话：(86) 0531-82993939</span>
+			<span>传真：(86) 0531-67891023</span>
+			<span>电子邮箱：bojixiehui@163.com</span><br>
+			<span>网址：www.bojixiehui.com</span>
+			<span>地址：济南市历下区经十路15982号第一大道12层</span>
+			<span>邮编：250000</span><br>
+			<span>版权所有   中国搏击协会(HK)</span>
+		</div>
+		<!--footer end-->
+	
+
+</body></html>

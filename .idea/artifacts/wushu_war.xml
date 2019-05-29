@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="wushu:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="wushu.war">
+      <element id="artifact" artifact-name="wushu:war exploded" />
+    </root>
+  </artifact>
+</component>

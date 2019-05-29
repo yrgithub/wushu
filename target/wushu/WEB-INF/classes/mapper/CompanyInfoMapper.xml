@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xiongdiyibeizi.mapper.CompanyInfoMapper" >
+  <resultMap id="company" type="com.xiongdiyibeizi.bean.user.CompanyInfo" >
+    <id column="company_info_id" property="companyInfoId" jdbcType="VARCHAR" />
+    <result column="company_tel" property="companyTel" jdbcType="VARCHAR" />
+    <result column="company_address" property="companyAddress" jdbcType="VARCHAR" />
+    <result column="content_name" property="contentName" jdbcType="VARCHAR" />
+    <result column="company_area" property="companyArea" jdbcType="VARCHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="company_corporate" property="companyCorporate" jdbcType="VARCHAR" />
+    <result column="company_picture_id" property="companyPictureId" jdbcType="VARCHAR" />
+    <result column="company_describe" property="companyDescribe" jdbcType="VARCHAR" />
+
+    <result column="user_name" property="username" jdbcType="VARCHAR"/>
+    <result column="type_name_zh" property="typeNameZh" jdbcType="VARCHAR"/>
+  </resultMap>
+
+  <select id="getBasicDataCnt" parameterType="java.util.Map" resultType="java.lang.Integer">
+    select
+    count(*)
+    from tb_company_info
+    <where>
+      <if test="firstValue != null and firstValue != ''">
+        company_name like concat('%',#{firstValue},'%')
+      </if>
+      <if test="companyArea != null and companyArea != ''">
+        company_area like concat('%',#{companyArea},'%')
+      </if>
+    </where>
+  </select>
+
+  <select id="getBasicData" parameterType="java.util.Map" resultMap="company">
+    select
+    user_name,
+    type_name_zh,
+    company_info_id,
+    company_tel,
+    company_address,
+    company_name,
+    company_area,
+    content_name,
+    company_corporate,
+    company_picture_id,
+    company_describe
+    from tb_user tu
+    left join tb_company_info tci on tu.create_by = tci.company_info_id
+    left join tb_user_type tut on tu.user_type = tut.type_id
+    left join tb_company_picture tcp on tcp.picture_id = tci.company_picture_id
+    left join tb_dict td on td.content_id = tci.company_area
+    <where>
+      <if test="companyName != null and companyName != ''">
+         and company_name like concat('%',#{companyName},'%')
+      </if>
+      <if test="companyArea != null and companyArea != ''">
+         and company_area like concat('%',#{companyArea},'%')
+      </if>
+      <if test="role != null and role != ''">
+        and tut.role = #{role}
+      </if>
+    </where>
+    limit #{start},#{num}
+  </select>
+
+  <select id="getDetailData" parameterType="java.lang.String" resultMap="company">
+    select
+    user_name,
+    company_info_id,
+    company_tel,
+    company_address,
+    company_area,
+    company_name,
+    company_corporate,
+    company_picture_id,
+    company_describe
+    from tb_user tu
+    left join tb_company_info tci on tu.create_by = tci.company_info_id
+    left join tb_company_picture tcp on tcp.picture_id = tci.company_picture_id
+    where user_name = #{username}
+  </select>
+
+  <delete id="deleteById" parameterType="java.lang.String">
+    delete from tb_company_info where company_info_id = #{strInfoId}
+  </delete>
+
+  <insert id="insert2company" parameterType="com.xiongdiyibeizi.bean.user.CompanyInfo">
+    insert into tb_company_info (
+    <if test="companyTel != null">
+      company_tel,
+    </if>
+    <if test="companyAddress != null">
+      company_address,
+    </if>
+    <if test="companyArea != null">
+      company_area,
+    </if>
+    <if test="companyName != null">
+      company_name,
+    </if>
+    <if test="companyCorporate != null">
+      company_corporate,
+    </if>
+    <if test="companyPictureId != null">
+      company_picture_id,
+    </if>
+    <if test="companyDescribe != null">
+      company_describe,
+    </if>
+    company_info_id
+    ) values (
+    <if test="companyTel != null">
+      #{companyTel},
+    </if>
+    <if test="companyAddress != null">
+      #{companyAddress},
+    </if>
+    <if test="companyArea != null">
+      #{companyArea},
+    </if>
+    <if test="companyName != null">
+      #{companyName},
+    </if>
+    <if test="companyCorporate != null">
+      #{companyCorporate},
+    </if>
+    <if test="companyPictureId != null">
+      #{companyPictureId},
+    </if>
+    <if test="companyDescribe != null">
+      #{companyDescribe},
+    </if>
+    #{companyInfoId}
+    );
+  </insert>
+
+  <update id="update2company" parameterType="com.xiongdiyibeizi.bean.user.CompanyInfo">
+    update tb_company_info
+    set
+    <if test="companyAddress != null">
+      company_address = #{companyAddress},
+    </if>
+    <if test="companyArea != null">
+      company_area = #{companyArea},
+    </if>
+    <if test="companyCorporate != null">
+      company_corporate = #{companyCorporate},
+    </if>
+    <if test="companyTel != null">
+      company_tel = #{companyTel},
+    </if>
+    <if test="companyPictureId != null">
+      company_picture_id = #{companyPictureId},
+    </if>
+    <if test="companyDescribe != null">
+      company_describe = #{companyDescribe},
+    </if>
+    <if test="companyName != null">
+      company_name = #{companyName}
+    </if>
+    where company_info_id =#{companyInfoId}
+  </update>
+</mapper>

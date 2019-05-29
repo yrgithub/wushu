@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xiongdiyibeizi.mapper.ShiroFilterMapper" >
+
+    <resultMap id="shiroFilter" type="com.xiongdiyibeizi.bean.user.ShiroFilterDefinition">
+        <id column="filter_id" property="filterId" jdbcType="INTEGER"/>
+        <result column="filter_url" property="filterUrl" jdbcType="VARCHAR"/>
+        <result column="filter_name" property="filterName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getShiroFilter" resultMap="shiroFilter">
+        select
+        filter_id,
+        filter_url,
+        filter_name
+        from tb_shiro_filter
+    </select>
+</mapper>
